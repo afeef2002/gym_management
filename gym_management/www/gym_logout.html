@@ -1,0 +1,19 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Logging out{% endblock %}
+
+{% block head_include %}
+    {{ super() }}
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+{% endblock %}
+
+{% block page_content %}
+<main class="logout-page">
+    <section class="schedule-empty">
+        <span class="schedule-eyebrow">SESSION ENDED</span>
+        <h1>You’re logged out.</h1>
+        <p>Thanks for visiting FitZone Gym. Come back whenever you’re ready for your next workout.</p>
+        <a href="/" class="btn">Return to FitZone <span aria-hidden="true">→</span></a>
+    </section>
+</main>
+{% endblock %}

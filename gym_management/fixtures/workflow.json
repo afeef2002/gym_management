@@ -1,0 +1,87 @@
+[
+  {
+    "doctype": "Workflow",
+    "name": "Gym Member Registration",
+    "workflow_name": "Gym Member Registration",
+    "document_type": "Gym Member",
+    "is_active": 1,
+    "send_email_alert": 0,
+    "workflow_state_field": "membership_status",
+    "states": [
+      {
+        "state": "Pending Receptionist Review",
+        "doc_status": "0",
+        "allow_edit": "Gym Receptionist",
+        "send_email": 0
+      },
+      {
+        "state": "Pending Manager Approval",
+        "doc_status": "0",
+        "allow_edit": "Gym Manager",
+        "send_email": 0
+      },
+      {
+        "state": "Active",
+        "doc_status": "0",
+        "allow_edit": "Gym Manager",
+        "send_email": 0
+      },
+      {
+        "state": "Rejected",
+        "doc_status": "0",
+        "allow_edit": "Gym Manager",
+        "send_email": 0
+      },
+      {
+        "state": "Expired",
+        "doc_status": "0",
+        "allow_edit": "Gym Manager",
+        "send_email": 0
+      }
+    ],
+    "transitions": [
+      {
+        "state": "Pending Receptionist Review",
+        "action": "Send to Manager",
+        "next_state": "Pending Manager Approval",
+        "allowed": "Gym Receptionist",
+        "allow_self_approval": 0
+      },
+      {
+        "state": "Pending Receptionist Review",
+        "action": "Reject Registration",
+        "next_state": "Rejected",
+        "allowed": "Gym Receptionist",
+        "allow_self_approval": 0
+      },
+      {
+        "state": "Pending Manager Approval",
+        "action": "Activate Membership",
+        "next_state": "Active",
+        "allowed": "Gym Manager",
+        "allow_self_approval": 0
+      },
+      {
+        "state": "Pending Manager Approval",
+        "action": "Reject Registration",
+        "next_state": "Rejected",
+        "allowed": "Gym Manager",
+        "allow_self_approval": 0
+      },
+      {
+        "state": "Pending Manager Approval",
+        "action": "Return for Review",
+        "next_state": "Pending Receptionist Review",
+        "allowed": "Gym Manager",
+        "allow_self_approval": 0
+      },
+      {
+        "state": "Active",
+        "action": "Expire Membership",
+        "next_state": "Expired",
+        "allowed": "Gym Manager",
+        "allow_self_approval": 0
+      }
+    ]
+  }
+]

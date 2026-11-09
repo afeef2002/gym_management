@@ -1,0 +1,182 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "GYM-MEM-.#####",
+ "creation": "2026-11-05 21:14:55.109057",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "full_name",
+  "email",
+  "phone",
+  "customer_type",
+  "selected_plan",
+  "membership_status",
+  "membership_price",
+  "membership_start_date",
+  "membership_end_date",
+  "amount_paid",
+  "payment_status",
+  "payment_reference",
+  "payment_date",
+  "assigned_trainer",
+  "user",
+  "assigned_trainer_email"
+ ],
+ "fields": [
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Phone",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "customer_type",
+   "fieldtype": "Select",
+   "label": "Customer Type",
+   "options": "Student\nRegular"
+  },
+  {
+   "fieldname": "selected_plan",
+   "fieldtype": "Link",
+   "label": "Selected Plan",
+   "options": "Membership Plan"
+  },
+  {
+   "default": "Pending Receptionist Review",
+   "fieldname": "membership_status",
+   "fieldtype": "Select",
+   "label": "Membership Status",
+   "options": "Pending Receptionist Review\nPending Manager Approval\nActive\nRejected\nExpired"
+  },
+  {
+   "fieldname": "membership_price",
+   "fieldtype": "Currency",
+   "label": "Membership Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "membership_start_date",
+   "fieldtype": "Date",
+   "label": "Membership Start Date"
+  },
+  {
+   "fieldname": "membership_end_date",
+   "fieldtype": "Date",
+   "label": "Membership End Date"
+  },
+  {
+   "default": "0",
+   "fieldname": "amount_paid",
+   "fieldtype": "Currency",
+   "label": "Amount Paid"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Unpaid\nPartially Paid\nPaid",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_reference",
+   "fieldtype": "Data",
+   "label": "Payment Reference"
+  },
+  {
+   "fieldname": "payment_date",
+   "fieldtype": "Date",
+   "label": "Payment Date"
+  },
+  {
+   "fieldname": "assigned_trainer",
+   "fieldtype": "Link",
+   "label": "Assigned Trainer",
+   "options": "Trainer"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fetch_from": "assigned_trainer.email",
+   "fieldname": "assigned_trainer_email",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Assigned Trainer Email",
+   "options": "Email",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-06 17:12:04.465645",
+ "modified_by": "Administrator",
+ "module": "Gym Management",
+ "name": "Gym Member",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Gym Receptionist",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Gym Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "if_owner": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Gym Member User"
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

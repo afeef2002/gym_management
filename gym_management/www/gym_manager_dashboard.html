@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - FitZone Gym</title>
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=4">
+</head>
+<body>
+    {% include "templates/includes/gym_nav.html" %}
+
+    <main class="staff-dashboard content-shell">
+        <section class="staff-welcome">
+            <span class="schedule-eyebrow">GYM OPERATIONS</span>
+            <h1>Manager dashboard</h1>
+            <p>A current view of memberships, bookings, attendance, and the upcoming schedule.</p>
+        </section>
+
+        <section class="staff-metrics" aria-label="Gym overview">
+            <article class="staff-metric"><span>ALL MEMBERS</span><strong>{{ member_count }}</strong><a href="/app/gym-member">Open member records →</a></article>
+            <article class="staff-metric metric-highlight"><span>NEEDS REVIEW</span><strong>{{ pending_count }}</strong><a href="/app/gym-member">Review registrations →</a></article>
+            <article class="staff-metric"><span>ACTIVE MEMBERSHIPS</span><strong>{{ active_count }}</strong><span class="metric-note">{{ expired_count }} expired or past end date</span></article>
+            <article class="staff-metric"><span>TODAY</span><strong>{{ today_session_count }} <small>sessions</small></strong><span class="metric-note">{{ today_booking_count }} confirmed bookings · {{ today_attendance_count }} check-ins</span></article>
+        </section>
+
+        <div class="staff-dashboard-grid">
+            <section class="staff-panel">
+                <div class="staff-panel-heading">
+                    <div><span class="schedule-eyebrow">ACTION REQUIRED</span><h2>Memberships to review</h2></div>
+                    <a href="/app/gym-member">Open records →</a>
+                </div>
+                {% if pending_members %}
+                    <div class="staff-list">
+                        {% for member in pending_members %}
+                            <a class="staff-list-row" href="/app/gym-member/{{ member.name }}">
+                                <span><strong>{{ member.full_name }}</strong><small>{{ member.email or member.name }}</small></span>
+                                <span class="staff-state">{{ member.membership_status }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="staff-empty">No registrations are waiting for review.</p>
+                {% endif %}
+            </section>
+
+            <section class="staff-panel">
+                <div class="staff-panel-heading">
+                    <div><span class="schedule-eyebrow">NEXT ON THE CALENDAR</span><h2>Upcoming sessions</h2></div>
+                    <a href="/app/trainer-session">Manage schedule →</a>
+                </div>
+                {% if upcoming_sessions %}
+                    <div class="staff-list">
+                        {% for session in upcoming_sessions %}
+                            <div class="staff-list-row">
+                                <span><strong>{{ session.session_name }}</strong><small>{{ session.trainer_name }} · {{ session.display_datetime }}</small></span>
+                                <span class="staff-state">{{ session.max_capacity }} capacity</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="staff-empty">No upcoming sessions are scheduled.</p>
+                {% endif %}
+            </section>
+        </div>
+
+        <section class="staff-quick-links" aria-label="Management links">
+            <a href="/app/membership-plan">Membership plans <span>→</span></a>
+            <a href="/app/trainer">Trainer profiles <span>→</span></a>
+            <a href="/app/session-booking">Session bookings <span>→</span></a>
+            <a href="/app/query-report/Daily%20Attendance%20Log">Daily attendance report <span>→</span></a>
+            <a href="/app/query-report/Monthly%20Attendance%20Summary">Monthly attendance report <span>→</span></a>
+        </section>
+    </main>
+
+    <footer><p>© 2026 FitZone Gym. All Rights Reserved.</p></footer>
+</body>
+</html>

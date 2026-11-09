@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Bookings - FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+
+<body>
+
+    {% include "templates/includes/gym_nav.html" %}
+
+    <main class="account-page content-shell">
+        <section class="page-intro page-intro-compact">
+            <span class="schedule-eyebrow">YOUR TRAINING</span>
+            <h1>My bookings</h1>
+            <p>All your reserved sessions, in one place.</p>
+        </section>
+
+        {% if not logged_in %}
+
+            <p>Please log in to view your bookings.</p>
+
+            <a href="/gym_login?redirect-to=/my_bookings" class="btn">
+                Login
+            </a>
+
+        {% elif not member_found %}
+
+            <p>Your gym member profile was not found.</p>
+
+        {% else %}
+
+            <div class="collection-grid account-card-grid">
+
+                {% for booking in bookings %}
+
+                    <article class="plan-card account-card">
+
+                        <h2>{{ booking.session_name }}</h2>
+
+                        <p>
+                            <strong>Trainer:</strong>
+                            {{ booking.trainer }}
+                        </p>
+
+                        <p><strong>Date:</strong> {{ booking.schedule_date_time or "Not available" }}</p>
+
+                        <p>
+                            <strong>Booking Status:</strong>
+                            {{ booking.booking_status }}
+                        </p>
+
+                    </article>
+
+                {% else %}
+
+                    <div class="schedule-empty"><h3>No sessions booked yet</h3><p>Your reserved sessions will appear here.</p><a href="/book_sessions" class="btn">Browse sessions <span aria-hidden="true">→</span></a></div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+    <footer>
+        <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

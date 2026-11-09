@@ -1,0 +1,27 @@
+[
+  {
+    "doctype": "Workflow Action Master",
+    "name": "Send to Manager",
+    "workflow_action_name": "Send to Manager"
+  },
+  {
+    "doctype": "Workflow Action Master",
+    "name": "Reject Registration",
+    "workflow_action_name": "Reject Registration"
+  },
+  {
+    "doctype": "Workflow Action Master",
+    "name": "Activate Membership",
+    "workflow_action_name": "Activate Membership"
+  },
+  {
+    "doctype": "Workflow Action Master",
+    "name": "Return for Review",
+    "workflow_action_name": "Return for Review"
+  },
+  {
+    "doctype": "Workflow Action Master",
+    "name": "Expire Membership",
+    "workflow_action_name": "Expire Membership"
+  }
+]

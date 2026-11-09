@@ -1,0 +1,101 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "MP-.#####",
+ "creation": "2026-11-05 20:55:50.945303",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "plan_name",
+  "regular_price",
+  "student_price",
+  "duration_months",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "plan_name",
+   "fieldtype": "Select",
+   "label": "Plan Name",
+   "options": "Gym Only\nGym + Boxing\nZumba\nAll-in-One"
+  },
+  {
+   "fieldname": "regular_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Regular Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "student_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Student Price",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "duration_months",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Duration (Months)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-06 15:32:17.690663",
+ "modified_by": "Administrator",
+ "module": "Gym Management",
+ "name": "Membership Plan",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Gym Receptionist",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Gym Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "plan_name"
+}

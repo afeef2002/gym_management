@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Join FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=4">
+</head>
+
+<body>
+
+{% include "templates/includes/gym_nav.html" %}
+
+<main class="auth-page">
+<div class="register-container auth-container">
+    <span class="schedule-eyebrow">BECOME A MEMBER</span>
+
+    <h1>Join FitZone Gym</h1>
+    <p>Fill in your details and create your member account.</p>
+
+    <form id="register-form">
+
+        <label for="full_name">Full Name</label>
+        <input
+            type="text"
+            id="full_name"
+            autocomplete="name"
+            required
+        >
+
+        <label for="email">Email Address</label>
+        <input
+            type="email"
+            id="email"
+            autocomplete="email"
+            required
+        >
+
+        <label for="phone">Phone Number</label>
+        <input
+            type="tel"
+            id="phone"
+            autocomplete="tel"
+            required
+        >
+
+        <label for="customer_type">Customer Type</label>
+        <select id="customer_type" required>
+            <option value="">Select Customer Type</option>
+            <option value="Student">Student</option>
+            <option value="Regular">Regular</option>
+        </select>
+
+        <label for="selected_plan">Choose Membership Plan</label>
+        <select id="selected_plan" required>
+            <option value="">Select a Plan</option>
+
+            {% for plan in plans %}
+                <option value="{{ plan.name }}">
+                    {{ plan.plan_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <label for="password">Create Password</label>
+        <div class="password-input-group">
+            <input
+                type="password"
+                id="password"
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="At least 8 characters"
+                required
+            >
+            <button type="button" class="password-toggle" data-password-toggle="password" aria-label="Show password" aria-pressed="false">Show</button>
+        </div>
+
+        <label for="confirm_password">Confirm Password</label>
+        <div class="password-input-group">
+            <input
+                type="password"
+                id="confirm_password"
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="Enter your password again"
+                required
+            >
+            <button type="button" class="password-toggle" data-password-toggle="confirm_password" aria-label="Show password" aria-pressed="false">Show</button>
+        </div>
+
+        <button type="submit" id="register-button">
+            Create Account
+        </button>
+
+        <div id="register-message" role="alert"></div>
+
+    </form>
+
+    <a href="/gym_login" class="login-link">
+        Already a member? Login here
+    </a>
+
+</div>
+</main>
+
+<script>
+document.querySelectorAll("[data-password-toggle]").forEach(function(toggle) {
+    toggle.addEventListener("click", function() {
+        const passwordInput = document.getElementById(toggle.dataset.passwordToggle);
+        const isVisible = passwordInput.type === "text";
+        passwordInput.type = isVisible ? "password" : "text";
+        toggle.textContent = isVisible ? "Show" : "Hide";
+        toggle.setAttribute("aria-label", isVisible ? "Show password" : "Hide password");
+        toggle.setAttribute("aria-pressed", String(!isVisible));
+    });
+});
+
+document.getElementById("register-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = document.getElementById("register-button");
+    const message = document.getElementById("register-message");
+
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm_password").value;
+
+    message.textContent = "";
+    message.style.color = "red";
+
+    if (password.length < 8) {
+        message.textContent = "Password must contain at least 8 characters.";
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        message.textContent = "The passwords do not match.";
+        return;
+    }
+
+    const data = {
+        full_name: document.getElementById("full_name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        customer_type: document.getElementById("customer_type").value,
+        selected_plan: document.getElementById("selected_plan").value,
+        password: password,
+        confirm_password: confirmPassword
+    };
+
+
+    button.disabled = true;
+    button.textContent = "Creating Account...";
+
+    try {
+        const response = await fetch(
+            "/api/method/gym_management.api.register_member",
+            {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Frappe-CSRF-Token": "{{ csrf_token }}",
+                },
+                body: new URLSearchParams(data)
+            }
+        );
+
+        const result = await response.json();
+
+        if (
+            response.ok &&
+            result.message &&
+            result.message.success
+        ) {
+            message.style.color = "green";
+            message.textContent = result.message.message;
+
+            document.getElementById("register-form").reset();
+
+            button.textContent = "Account Created";
+
+            setTimeout(function() {
+                window.location.href = "/gym_login";
+            }, 3000);
+
+            return;
+        }
+
+        let errorMessage = "Registration failed. Please try again.";
+
+        if (typeof result.message === "string") {
+            errorMessage = result.message;
+        } else if (result._server_messages) {
+            try {
+                const serverMessages = JSON.parse(result._server_messages);
+
+                if (serverMessages.length > 0) {
+                    const firstMessage = JSON.parse(serverMessages[0]);
+                    errorMessage = firstMessage.message || errorMessage;
+                }
+            } catch (error) {
+                console.error("Could not read server error:", error);
+            }
+        }
+
+        message.textContent = errorMessage;
+
+    } catch (error) {
+        message.textContent = "Unable to submit registration. Please try again.";
+        console.error(error);
+    }
+
+    button.disabled = false;
+    button.textContent = "Create Account";
+});
+</script>
+
+</body>
+</html>

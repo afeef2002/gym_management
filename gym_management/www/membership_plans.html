@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Membership Plans - FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+
+<body>
+
+    {% include "templates/includes/gym_nav.html" %}
+
+    <section class="page-intro">
+        <span class="schedule-eyebrow">MEMBERSHIP</span>
+        <h1>Make room for stronger.</h1>
+        <p>Choose the right plan for your fitness journey. Student and regular pricing is shown upfront.</p>
+    </section>
+
+    <section class="plans collection-grid content-shell">
+
+        {% for plan in plans %}
+
+        <article class="plan-card membership-card">
+
+            <h2>{{ plan.plan_name }}</h2>
+
+            <p class="card-description">{{ plan.description or "Build a routine that works for you." }}</p>
+
+            <div class="price-row"><span>Regular</span><strong>₹{{ plan.regular_price }}</strong></div>
+            <div class="price-row"><span>Student</span><strong>₹{{ plan.student_price }}</strong></div>
+            <a href="/register" class="btn card-button">Choose this plan <span aria-hidden="true">→</span></a>
+        </article>
+
+        {% else %}
+
+        <div class="schedule-empty"><h3>Plans are being updated</h3><p>Please check back soon for available membership options.</p></div>
+
+        {% endfor %}
+
+    </section>
+
+    <footer>
+        <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

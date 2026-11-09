@@ -1,0 +1,32 @@
+[
+  {
+    "doctype": "Workflow State",
+    "name": "Pending Receptionist Review",
+    "workflow_state_name": "Pending Receptionist Review",
+    "style": "Warning"
+  },
+  {
+    "doctype": "Workflow State",
+    "name": "Pending Manager Approval",
+    "workflow_state_name": "Pending Manager Approval",
+    "style": "Info"
+  },
+  {
+    "doctype": "Workflow State",
+    "name": "Active",
+    "workflow_state_name": "Active",
+    "style": "Success"
+  },
+  {
+    "doctype": "Workflow State",
+    "name": "Rejected",
+    "workflow_state_name": "Rejected",
+    "style": "Danger"
+  },
+  {
+    "doctype": "Workflow State",
+    "name": "Expired",
+    "workflow_state_name": "Expired",
+    "style": "Inverse"
+  }
+]

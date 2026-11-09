@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Trainers - FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+
+<body>
+
+{% include "templates/includes/gym_nav.html" %}
+
+<section class="page-intro">
+    <span class="schedule-eyebrow">EXPERT COACHING</span>
+    <h1>Meet your training team.</h1>
+    <p>Learn from experienced professionals who bring energy, focus, and know-how to every session.</p>
+</section>
+
+<section class="plans collection-grid content-shell">
+
+    {% for trainer in trainers %}
+
+    <article class="plan-card trainer-card">
+        <span class="trainer-card-icon" aria-hidden="true">{{ (trainer.trainer_name or "T")[:1] }}</span>
+        <h2>{{ trainer.trainer_name }}</h2>
+        {% if trainer.specialization %}<span class="trainer-tag">{{ trainer.specialization }}</span>{% endif %}
+        <p class="card-description">{{ trainer.bio or "Ready to help you get more from every workout." }}</p>
+        <div class="trainer-contact">
+            {% if trainer.email %}<a href="mailto:{{ trainer.email }}">{{ trainer.email }}</a>{% endif %}
+            {% if trainer.phone %}<a href="tel:{{ trainer.phone }}">{{ trainer.phone }}</a>{% endif %}
+        </div>
+    </article>
+
+    {% else %}
+
+    <div class="schedule-empty"><h3>Trainer profiles coming soon</h3><p>Our coaching team will be here shortly.</p></div>
+
+    {% endfor %}
+
+</section>
+
+<footer>
+    <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

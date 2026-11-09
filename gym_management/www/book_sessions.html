@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Trainer Sessions - FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+
+<body>
+
+    {% include "templates/includes/gym_nav.html" %}
+
+    <main class="schedule-page" data-csrf-token="{{ csrf_token }}">
+        <section class="schedule-hero">
+            <div class="schedule-hero-content">
+                <span class="schedule-eyebrow">TRAIN WITH PURPOSE</span>
+                <h1>Find your next session.</h1>
+                <p>Choose a coach, find a time that works, and reserve your spot. Your next great workout starts here.</p>
+                <div class="schedule-hero-meta">
+                    <span><strong>{{ sessions|length }}</strong> upcoming sessions</span>
+                    <span><strong>{{ trainers|length }}</strong> expert trainers</span>
+                </div>
+            </div>
+            <div class="schedule-hero-mark" aria-hidden="true">FZ</div>
+        </section>
+
+        <section class="schedule-content" aria-labelledby="schedule-heading">
+            <div class="schedule-section-heading">
+                <div>
+                    <span class="schedule-eyebrow">THE CLASS LINEUP</span>
+                    <h2 id="schedule-heading">Upcoming sessions</h2>
+                </div>
+                <p>Spots are limited. Book yours before they’re gone.</p>
+            </div>
+
+            <div class="scheduler-filters" aria-label="Session schedule filters">
+                <label for="trainer-filter">
+                    <span>TRAINER</span>
+                    <select id="trainer-filter">
+                        <option value="">All trainers</option>
+                        {% for trainer in trainers %}
+                            <option value="{{ trainer.name }}">{{ trainer.trainer_name }}{% if trainer.specialization %} — {{ trainer.specialization }}{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label for="date-filter">
+                    <span>DATE</span>
+                    <input id="date-filter" type="date" min="{{ today }}">
+                </label>
+
+                <button type="button" class="schedule-reset" id="clear-schedule-filters">Clear filters</button>
+            </div>
+
+            <div class="schedule-toolbar">
+                <p id="schedule-results" aria-live="polite"></p>
+            </div>
+
+            <div class="schedule-grid" id="session-schedule">
+                {% for session in sessions %}
+                    <article
+                        class="schedule-slot"
+                        data-trainer="{{ session.trainer }}"
+                        data-date="{{ session.session_date }}">
+                        <div class="slot-topline">
+                            <div class="slot-date" aria-label="{{ frappe.utils.formatdate(session.session_date) }}">
+                                <span>{{ session.session_weekday }}</span>
+                                <strong>{{ session.session_day }}</strong>
+                                <span>{{ session.session_month }}</span>
+                            </div>
+                            <span class="slot-status{% if not session.available_seats %} is-full{% endif %}">
+                                {% if session.available_seats %}SPOTS OPEN{% else %}FULL{% endif %}
+                            </span>
+                        </div>
+
+                        <div class="slot-main">
+                            <h3>{{ session.session_name }}</h3>
+                            {% if session.description %}
+                                <p class="slot-description">{{ session.description }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="slot-trainer">
+                            <span class="trainer-avatar" aria-hidden="true">{{ (session.trainer_name or "T")[:1] }}</span>
+                            <div>
+                                <span class="slot-label">COACH</span>
+                                <strong>{{ session.trainer_name or "Trainer to be announced" }}</strong>
+                                {% if session.trainer_specialization %}
+                                    <span class="trainer-specialization">{{ session.trainer_specialization }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="slot-details">
+                            <div>
+                                <span class="slot-label">START TIME</span>
+                                <strong>{{ session.session_time }}</strong>
+                            </div>
+                            <div>
+                                <span class="slot-label">AVAILABILITY</span>
+                                <strong>{{ session.available_seats }} <span class="slot-capacity-copy">of {{ session.max_capacity }} spots</span></strong>
+                            </div>
+                        </div>
+                        <div class="slot-capacity" role="progressbar" aria-label="Available seats" aria-valuenow="{{ session.available_seats }}" aria-valuemin="0" aria-valuemax="{{ session.max_capacity }}">
+                            <span style="width: {{ session.capacity_percent }}%"></span>
+                        </div>
+
+                        <div class="slot-action">
+                            {% if not logged_in %}
+                                <a href="/gym_login?redirect-to=/book_sessions" class="btn slot-button">Log in to book <span aria-hidden="true">→</span></a>
+                            {% elif not can_book %}
+                                <p class="slot-notice">An active membership is required to book.</p>
+                            {% elif not session.trainer_email_available %}
+                                <p class="slot-notice">Booking opens when the trainer profile is complete.</p>
+                            {% elif session.available_seats > 0 %}
+                                <button type="button" class="btn book-button slot-button" data-session="{{ session.name }}">Reserve your spot <span aria-hidden="true">→</span></button>
+                            {% else %}
+                                <p class="slot-notice">This session is full. Check back for openings.</p>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% else %}
+                    <div class="schedule-empty" id="no-scheduled-sessions">
+                        <span class="schedule-empty-icon" aria-hidden="true">✦</span>
+                        <h3>New sessions are on the way</h3>
+                        <p>There aren’t any upcoming sessions on the calendar just yet. Check back soon.</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="schedule-empty schedule-filter-empty" id="no-filter-results" hidden>
+                <h3>No sessions match those filters</h3>
+                <p>Try another trainer or date to see more available sessions.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+    </footer>
+
+    <script src="/assets/gym_management/js/main.js?v=3"></script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitZone Gym</title>
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+<body>
+
+    {% include "templates/includes/gym_nav.html" %}
+
+    <section class="hero home-hero">
+        <div class="home-hero-content">
+            <span class="schedule-eyebrow">YOUR STRONGER STARTS HERE</span>
+            <h1>Move better.<br>Feel stronger.</h1>
+            <p>Expert coaching, energizing classes, and a community that keeps you moving forward.</p>
+            <div class="home-hero-actions">
+                <a href="/register" class="btn">Start your membership <span aria-hidden="true">→</span></a>
+                <a href="/book_sessions" class="btn btn-secondary">Explore sessions</a>
+            </div>
+        </div>
+        <div class="home-hero-stamp" aria-hidden="true">FIT<br>ZONE</div>
+    </section>
+
+    <section class="home-intro content-shell">
+        <span class="schedule-eyebrow">MORE THAN A WORKOUT</span>
+        <h2>Find your pace. Build your strength.</h2>
+        <p>We bring together professional trainers, focused sessions, and flexible membership plans to help you make fitness part of your life.</p>
+        <div class="home-feature-grid">
+            <a class="home-feature-card" href="/membership_plans"><span>01</span><h3>Plans for your goals</h3><p>Choose the membership that fits your routine.</p><strong>Explore plans →</strong></a>
+            <a class="home-feature-card" href="/trainers"><span>02</span><h3>Coaches in your corner</h3><p>Meet the people ready to help you progress.</p><strong>Meet the trainers →</strong></a>
+            <a class="home-feature-card" href="/book_sessions"><span>03</span><h3>Sessions that fit</h3><p>Find an upcoming session and save your spot.</p><strong>View sessions →</strong></a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

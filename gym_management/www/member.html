@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Member Dashboard - FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+
+<body>
+
+{% include "templates/includes/gym_nav.html" %}
+
+<main class="member-page content-shell">
+
+    {% if not logged_in %}
+
+        <section class="member-welcome"><span class="schedule-eyebrow">MEMBER AREA</span><h1>Your fitness, all in one place.</h1><p>Log in to see your membership and manage your sessions.</p><a href="/gym_login?redirect-to=/member" class="btn">Log in <span aria-hidden="true">→</span></a></section>
+
+    {% elif member %}
+
+        <section class="member-welcome"><span class="schedule-eyebrow">MEMBER DASHBOARD</span><h1>Welcome back, {{ member.full_name }}.</h1><p>Your membership details and gym services, all together.</p></section>
+        <section class="member-details-card">
+            <div class="schedule-section-heading"><div><span class="schedule-eyebrow">YOUR MEMBERSHIP</span><h2>Membership details</h2></div><span class="member-status">{{ member.membership_status }}</span></div>
+            <div class="member-details-grid">
+                <div><span>Email</span><strong>{{ member.email }}</strong></div>
+                <div><span>Phone</span><strong>{{ member.phone or "Not provided" }}</strong></div>
+                <div><span>Customer type</span><strong>{{ member.customer_type }}</strong></div>
+                <div><span>Membership plan</span><strong>{{ member.selected_plan }}</strong></div>
+                <div><span>Plan price</span><strong>{{ frappe.format(member.membership_price, {"fieldtype": "Currency"}) }}</strong></div>
+                <div><span>Payment status</span><strong>{{ member.payment_status or "Unpaid" }}</strong></div>
+                <div><span>Membership period</span><strong>{{ member.membership_start_date or "Pending approval" }}{% if member.membership_end_date %} to {{ member.membership_end_date }}{% endif %}</strong></div>
+            </div>
+        </section>
+        <section class="member-services">
+            <div class="schedule-section-heading"><div><span class="schedule-eyebrow">KEEP MOVING</span><h2>Member services</h2></div></div>
+            <div class="home-feature-grid">
+                <a class="home-feature-card" href="/book_sessions"><span>01</span><h3>Book a session</h3><p>Find a time and coach that works for you.</p><strong>Browse sessions →</strong></a>
+                <a class="home-feature-card" href="/my_bookings"><span>02</span><h3>My bookings</h3><p>Keep track of your upcoming sessions.</p><strong>View bookings →</strong></a>
+                <a class="home-feature-card" href="/my_attendance"><span>03</span><h3>My attendance</h3><p>See your check-ins and workout notes.</p><strong>View attendance →</strong></a>
+            </div>
+        </section>
+    {% else %}
+
+        <h1>Member Profile Not Found</h1>
+
+        <p>Please contact the gym receptionist to link your account.</p>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

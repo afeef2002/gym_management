@@ -1,0 +1,34 @@
+<header class="gym-site-header">
+    <a class="logo" href="/">FitZone Gym</a>
+
+    <nav class="gym-site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/trainers">Trainers</a>
+        <a href="/book_sessions">Sessions</a>
+        {% if logged_in %}
+            {% set gym_roles = frappe.get_all("Has Role", filters={"parent": frappe.session.user}, fields=["role"]) %}
+            {% set manager_roles = gym_roles|selectattr("role", "in", ["Gym Manager", "System Manager"])|list %}
+            {% set trainer_roles = gym_roles|selectattr("role", "equalto", "Gym Trainer")|list %}
+            {% set receptionist_roles = gym_roles|selectattr("role", "equalto", "Gym Receptionist")|list %}
+            {% set trainer_profiles = frappe.get_all("Trainer", filters={"user": frappe.session.user}, fields=["name"], limit_page_length=1) %}
+            {% if manager_roles %}
+                <a href="/gym_manager_dashboard">Manager Dashboard</a>
+            {% endif %}
+            {% if trainer_roles or trainer_profiles %}
+                <a href="/trainer_dashboard">Trainer Dashboard</a>
+                <a href="/trainer_dashboard#trainer-calendar">My Calendar</a>
+            {% elif receptionist_roles and not manager_roles %}
+                <a href="/gym_receptionist_dashboard">Receptionist Dashboard</a>
+            {% else %}
+                <a href="/member">Dashboard</a>
+                <a href="/my_bookings">My Bookings</a>
+                <a href="/my_attendance">My Attendance</a>
+            {% endif %}
+            <a href="/gym_logout">Log Out</a>
+        {% else %}
+            <a href="/membership_plans">Plans</a>
+            <a href="/gym_login">Log In</a>
+            <a href="/register">Join</a>
+        {% endif %}
+    </nav>
+</header>

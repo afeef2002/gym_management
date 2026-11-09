@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Dashboard - FitZone Gym</title>
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=5">
+</head>
+<body>
+    {% include "templates/includes/gym_nav.html" %}
+
+    <main class="staff-dashboard content-shell">
+        <section class="staff-welcome">
+            <span class="schedule-eyebrow">COACH WORKSPACE</span>
+            <h1>Welcome, {{ trainer.trainer_name }}.</h1>
+            <p>Your upcoming sessions and confirmed member bookings.</p>
+        </section>
+
+        <section class="staff-metrics" aria-label="Your training overview">
+            <article class="staff-metric"><span>UPCOMING SESSIONS</span><strong>{{ sessions|length }}</strong><span class="metric-note">Scheduled under your trainer profile</span></article>
+            <article class="staff-metric metric-highlight"><span>CONFIRMED BOOKINGS</span><strong>{{ confirmed_booking_count }}</strong><span class="metric-note">Across your upcoming sessions</span></article>
+            <article class="staff-metric"><span>SESSIONS TODAY</span><strong>{{ today_session_count }}</strong><span class="metric-note">Starting today</span></article>
+            <article class="staff-metric"><span>OPEN SPOTS</span><strong>{{ available_spots }}</strong><span class="metric-note">Across upcoming sessions</span></article>
+        </section>
+
+        <section class="staff-panel trainer-calendar-panel" id="trainer-calendar" data-csrf-token="{{ csrf_token }}">
+            <div class="staff-panel-heading calendar-heading">
+                <div><span class="schedule-eyebrow">SET YOUR AVAILABILITY</span><h2>Booking calendar</h2></div>
+                <div class="calendar-controls">
+                    <button class="calendar-nav-button" type="button" id="calendar-previous" aria-label="Previous week">←</button>
+                    <strong id="calendar-range" aria-live="polite"></strong>
+                    <button class="calendar-nav-button" type="button" id="calendar-next" aria-label="Next week">→</button>
+                    <button class="calendar-today-button" type="button" id="calendar-today">Today</button>
+                </div>
+            </div>
+            <p class="calendar-help">Select a day to see all 24 hours. Mark open hours for one-hour appointments. Booked hours stay on your calendar and can’t be removed.</p>
+            <div class="calendar-week" id="calendar-week" aria-label="Choose a day"></div>
+            <div class="calendar-selected-date" id="calendar-selected-date"></div>
+            <div class="calendar-feedback" id="calendar-feedback" role="status" aria-live="polite"></div>
+            <div class="calendar-hour-list" id="calendar-hours" aria-label="24-hour availability"></div>
+        </section>
+
+        <div class="staff-dashboard-grid">
+            <section class="staff-panel">
+                <div class="staff-panel-heading">
+                    <div><span class="schedule-eyebrow">YOUR CALENDAR</span><h2>Upcoming sessions</h2></div>
+                    <a href="/book_sessions">Public schedule →</a>
+                </div>
+                {% if sessions %}
+                    <div class="staff-list">
+                        {% for session in sessions %}
+                            <div class="staff-list-row">
+                                <span><strong>{{ session.session_name }}</strong><small>{{ session.display_datetime }} · Capacity {{ session.max_capacity }}</small>{% if session.description %}<small>{{ session.description }}</small>{% endif %}</span>
+                                <span class="staff-state">{{ session.name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="staff-empty">There are no upcoming sessions assigned to your trainer profile.</p>
+                {% endif %}
+            </section>
+
+            <section class="staff-panel">
+                <div class="staff-panel-heading">
+                    <div><span class="schedule-eyebrow">MEMBER ROSTER</span><h2>Confirmed bookings</h2></div>
+                </div>
+                {% if bookings %}
+                    <div class="staff-list">
+                        {% for booking in bookings %}
+                            <div class="staff-list-row">
+                                <span><strong>{{ booking.member_name }}</strong><small>{{ booking.session_name }} · {{ frappe.utils.format_datetime(booking.schedule_date_time) if booking.schedule_date_time else "Time unavailable" }}</small></span>
+                                <span class="staff-state">Confirmed</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="staff-empty">No confirmed bookings for your upcoming sessions yet.</p>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <footer><p>© 2026 FitZone Gym. All Rights Reserved.</p></footer>
+    <script src="/assets/gym_management/js/trainer_calendar.js?v=2"></script>
+</body>
+</html>

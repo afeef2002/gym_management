@@ -1,0 +1,30 @@
+[
+  {
+    "doctype": "Role",
+    "name": "Gym Receptionist",
+    "role_name": "Gym Receptionist",
+    "desk_access": 1,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "name": "Gym Manager",
+    "role_name": "Gym Manager",
+    "desk_access": 1,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "name": "Gym Member User",
+    "role_name": "Gym Member User",
+    "desk_access": 0,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "name": "Gym Trainer",
+    "role_name": "Gym Trainer",
+    "desk_access": 0,
+    "is_custom": 1
+  }
+]

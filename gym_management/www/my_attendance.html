@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Attendance - FitZone Gym</title>
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+</head>
+<body>
+
+{% include "templates/includes/gym_nav.html" %}
+
+<main class="account-page content-shell">
+    <section class="page-intro page-intro-compact">
+        <span class="schedule-eyebrow">YOUR PROGRESS</span>
+        <h1>My attendance</h1>
+        <p>Every visit is a step forward. Here are your recent check-ins.</p>
+    </section>
+
+    {% if not logged_in %}
+
+        <p>Please log in to view your attendance.</p>
+        <a href="/gym_login?redirect-to=/my_attendance" class="btn">Log in</a>
+
+    {% elif not member_found %}
+
+        <p>Your gym member profile was not found.</p>
+
+    {% else %}
+
+        <div class="collection-grid account-card-grid">
+
+            {% for record in attendance %}
+
+                <article class="plan-card account-card attendance-card">
+                    <span class="schedule-eyebrow">WORKOUT LOG</span>
+                    <h2>{{ record.date or "Attendance record" }}</h2>
+
+                    <p><strong>Check-in time</strong><span>{{ record.check_in_time or "Not available" }}</span></p>
+                    <p><strong>Workout notes</strong><span>{{ record.workout_notes or "No notes added" }}</span></p>
+                </article>
+
+            {% else %}
+
+                <div class="schedule-empty"><h3>Your progress starts here</h3><p>Attendance and workout logs will appear after your first visit.</p></div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+</main>
+
+<footer>
+    <p>© 2026 FitZone Gym. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

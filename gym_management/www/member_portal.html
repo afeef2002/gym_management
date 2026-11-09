@@ -1,0 +1,239 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Gym Member Portal{% endblock %}
+
+{% block head_include %}
+    {{ super() }}
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=3">
+{% endblock %}
+
+{% block page_content %}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+    }
+
+    .gym-dashboard {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .gym-header {
+        background: linear-gradient(120deg, #17191b, #34383b);
+        color: white;
+        padding: 35px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .gym-header h1 {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .gym-header p {
+        font-size: 15px;
+        margin: 0;
+        opacity: 0.9;
+    }
+
+    .gym-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+    }
+
+    .gym-card h3 {
+        font-size: 21px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #292d30;
+    }
+
+    .profile-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .info-box {
+        background: #f8fafc;
+        padding: 18px;
+        border-radius: 8px;
+    }
+
+    .info-label {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 7px;
+    }
+
+    .info-value {
+        color: #292d30;
+        font-size: 16px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .status-badge {
+        display: inline-block;
+        background: #fef3c7;
+        color: #92400e;
+        padding: 6px 13px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .session-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .session-table th {
+        background: #fff2ed;
+        color: #b83e19;
+        padding: 14px;
+        text-align: left;
+    }
+
+    .session-table td {
+        padding: 14px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .empty-message {
+        background: #f8fafc;
+        padding: 25px;
+        text-align: center;
+        border-radius: 8px;
+        color: #64748b;
+    }
+
+    @media (max-width: 600px) {
+        .profile-info {
+            grid-template-columns: 1fr;
+        }
+
+        .gym-header {
+            padding: 25px;
+        }
+
+        .gym-header h1 {
+            font-size: 24px;
+        }
+
+        .session-table th,
+        .session-table td {
+            padding: 9px;
+            font-size: 13px;
+        }
+    }
+</style>
+
+<div class="gym-dashboard">
+
+    {% include "templates/includes/gym_nav.html" %}
+
+    <!-- Header -->
+    <div class="gym-header">
+        <span class="schedule-eyebrow">MEMBER DASHBOARD</span>
+        <h1>Welcome to Gym Member Portal</h1>
+        <p>Manage your membership and explore available training sessions.</p>
+    </div>
+
+    <!-- Member Profile -->
+    <div class="gym-card">
+
+        <h3>My Profile</h3>
+
+        <div class="profile-info">
+
+            <div class="info-box">
+                <div class="info-label">Member ID</div>
+                <div class="info-value">{{ member.name }}</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Member Name</div>
+                <div class="info-value">{{ member.full_name }}</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Email Address</div>
+                <div class="info-value">{{ member.email }}</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Membership Status</div>
+                <div>
+                    <span class="status-badge">
+                        {{ member.membership_status }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Training Sessions -->
+    <div class="gym-card">
+
+        <h3>Available Training Sessions</h3>
+
+        {% if sessions %}
+
+        <div style="overflow-x: auto;">
+            <table class="session-table">
+
+                <thead>
+                    <tr>
+                        <th>Session ID</th>
+                        <th>Session</th>
+                        <th>Session Date</th>
+                        <th>Trainer</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for session in sessions %}
+                    <tr>
+                        <td>{{ session.name }}</td>
+                        <td>{{ session.session_name }}</td>
+                        <td>{{ session.schedule_date_time }}</td>
+                        <td>{{ session.trainer or "Not assigned" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+            <h4>No Upcoming Sessions</h4>
+            <p>There are currently no scheduled training sessions available.</p>
+            <p>Please check again later.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="gym-card">
+        <h3>Member Services</h3>
+        <p><a href="/book_sessions">Browse and book sessions</a></p>
+        <p><a href="/my_bookings">View my bookings</a></p>
+        <p><a href="/my_attendance">View my attendance</a></p>
+        <p><a href="/printview?doctype=Gym%20Member&name={{ member.name }}&format=Gym%20Billing%20Summary">Print billing summary</a></p>
+    </div>
+
+</div>
+
+{% endblock %}

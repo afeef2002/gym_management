@@ -1,0 +1,13 @@
+[
+  {
+    "doctype": "Print Format",
+    "name": "Gym Billing Summary",
+    "module": "Gym Management",
+    "print_format_for": "DocType",
+    "doc_type": "Gym Member",
+    "standard": "Yes",
+    "custom_format": 1,
+    "print_format_type": "Jinja",
+    "html": "<div class=\"print-format\"><h2>Membership Billing Summary</h2><hr><table class=\"table table-bordered\"><tr><th>Member</th><td>{{ doc.full_name }}</td></tr><tr><th>Member ID</th><td>{{ doc.name }}</td></tr><tr><th>Email</th><td>{{ doc.email }}</td></tr><tr><th>Plan</th><td>{{ frappe.db.get_value('Membership Plan', doc.selected_plan, 'plan_name') or doc.selected_plan }}</td></tr><tr><th>Customer Type</th><td>{{ doc.customer_type }}</td></tr><tr><th>Membership Status</th><td>{{ doc.membership_status }}</td></tr><tr><th>Membership Period</th><td>{{ doc.membership_start_date or 'Not activated' }}{% if doc.membership_end_date %} to {{ doc.membership_end_date }}{% endif %}</td></tr><tr><th>Plan Price</th><td>{{ frappe.format(doc.membership_price, {'fieldtype': 'Currency'}) }}</td></tr><tr><th>Amount Paid</th><td>{{ frappe.format(doc.amount_paid, {'fieldtype': 'Currency'}) }}</td></tr><tr><th>Balance Due</th><td>{{ frappe.format((doc.membership_price or 0) - (doc.amount_paid or 0), {'fieldtype': 'Currency'}) }}</td></tr><tr><th>Payment Status</th><td>{{ doc.payment_status or 'Unpaid' }}</td></tr><tr><th>Payment Date</th><td>{{ doc.payment_date or '-' }}</td></tr><tr><th>Payment Reference</th><td>{{ doc.payment_reference or '-' }}</td></tr></table><p>Generated on {{ frappe.utils.formatdate(frappe.utils.today()) }}</p></div>"
+  }
+]

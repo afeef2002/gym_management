@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Member Login - FitZone Gym</title>
+
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=4">
+</head>
+
+<body>
+
+{% include "templates/includes/gym_nav.html" %}
+
+<main class="auth-page">
+<div class="login-container auth-container">
+    <span class="schedule-eyebrow">WELCOME BACK</span>
+
+    <h1>Member Login</h1>
+    <p>Welcome back! Log in to your gym account.</p>
+
+    <form id="login-form">
+
+        <label for="email">Email Address</label>
+        <input
+            type="email"
+            id="email"
+            name="usr"
+            placeholder="Enter your email"
+            required
+        >
+
+        <label for="password">Password</label>
+        <div class="password-input-group">
+            <input
+                type="password"
+                id="password"
+                name="pwd"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+            <button type="button" class="password-toggle" data-password-toggle="password" aria-label="Show password" aria-pressed="false">Show</button>
+        </div>
+
+        <button type="submit" id="login-button">
+            Login
+        </button>
+
+        <div id="login-message" role="alert"></div>
+
+    </form>
+
+    <p class="auth-alternate">
+    Not a member yet?
+    <a href="/register">Register here</a>
+</p>
+
+<a href="/" class="back-home">Back to Home</a>
+
+</div>
+</main>
+
+<script>
+document.querySelectorAll("[data-password-toggle]").forEach(function(toggle) {
+    toggle.addEventListener("click", function() {
+        const passwordInput = document.getElementById(toggle.dataset.passwordToggle);
+        const isVisible = passwordInput.type === "text";
+        passwordInput.type = isVisible ? "password" : "text";
+        toggle.textContent = isVisible ? "Show" : "Hide";
+        toggle.setAttribute("aria-label", isVisible ? "Show password" : "Hide password");
+        toggle.setAttribute("aria-pressed", String(!isVisible));
+    });
+});
+
+document.getElementById("login-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    let loginSucceeded = false;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const button = document.getElementById("login-button");
+    const message = document.getElementById("login-message");
+
+    button.disabled = true;
+    button.textContent = "Logging in...";
+    message.textContent = "";
+
+    try {
+        const response = await fetch("/api/method/login", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                usr: email,
+                pwd: password
+            })
+        });
+
+        const result = await response.json();
+
+if (
+    response.ok &&
+    (
+        result.message === "Logged In" ||
+        result.message === "No App"
+    )
+) {
+    loginSucceeded = true;
+    const redirectTo = new URLSearchParams(window.location.search).get("redirect-to");
+    let destination = redirectTo;
+    if (!destination) {
+        const destinationResponse = await fetch(
+            "/api/method/gym_management.api.get_login_redirect",
+            { credentials: "same-origin" }
+        );
+        const destinationResult = await destinationResponse.json();
+        if (!destinationResponse.ok || typeof destinationResult.message !== "string") {
+            throw new Error("Unable to determine your dashboard.");
+        }
+        destination = destinationResult.message;
+    }
+    const redirectUrl = new URL(destination, window.location.origin);
+    window.location.href = redirectUrl.origin === window.location.origin
+        ? `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`
+        : "/member";
+} else {
+    message.textContent =
+        "Invalid email or password. Please try again.";
+}
+    } catch (error) {
+        message.textContent = loginSucceeded
+            ? "You are logged in, but we couldn't open your dashboard. Try /trainer_dashboard or contact the Gym Manager."
+            : "Unable to log in. Please try again.";
+        console.error(error);
+    }
+
+    button.disabled = false;
+    button.textContent = "Login";
+});
+</script>
+
+</body>
+</html>

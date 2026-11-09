@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist Dashboard - FitZone Gym</title>
+    <link rel="stylesheet" href="/assets/gym_management/css/style.css?v=4">
+</head>
+<body>
+    {% include "templates/includes/gym_nav.html" %}
+
+    <main class="staff-dashboard content-shell">
+        <section class="staff-welcome">
+            <span class="schedule-eyebrow">MEMBER REGISTRATIONS</span>
+            <h1>Receptionist dashboard</h1>
+            <p>Review new membership registrations and send them to the manager for approval.</p>
+        </section>
+
+        <section class="staff-metrics" aria-label="Receptionist overview">
+            <article class="staff-metric metric-highlight">
+                <span>PENDING REVIEW</span>
+                <strong>{{ pending_count }}</strong>
+                <a href="#pending-approvals">View pending registrations →</a>
+            </article>
+        </section>
+
+        <section class="staff-panel" id="pending-approvals">
+            <div class="staff-panel-heading">
+                <div>
+                    <span class="schedule-eyebrow">ACTION REQUIRED</span>
+                    <h2>Pending approvals</h2>
+                </div>
+                <a href="/app/gym-member">Open member records →</a>
+            </div>
+            {% if pending_members %}
+                <div class="staff-list">
+                    {% for member in pending_members %}
+                        <a class="staff-list-row" href="/app/gym-member/{{ member.name }}">
+                            <span>
+                                <strong>{{ member.full_name }}</strong>
+                                <small>{{ member.email or member.name }}{% if member.selected_plan %} · {{ member.selected_plan }}{% endif %}</small>
+                            </span>
+                            <span class="staff-state">Review registration →</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="staff-empty">No registrations are waiting for your review.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer><p>© 2026 FitZone Gym. All Rights Reserved.</p></footer>
+</body>
+</html>

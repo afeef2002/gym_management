@@ -5,6 +5,34 @@ app_description = "Gym Membership Management System"
 app_email = "afeefmbps@gmail.com"
 app_license = "mit"
 
+fixtures = [
+    {"dt": "Role", "filters": [["name", "in", ["Gym Receptionist", "Gym Manager", "Gym Member User", "Gym Trainer"]]]},
+    {
+        "dt": "Workflow State",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Pending Receptionist Review",
+                    "Pending Manager Approval",
+                    "Active",
+                    "Rejected",
+                    "Expired",
+                ],
+            ]
+        ],
+    },
+    {
+        "dt": "Workflow Action Master",
+        "filters": [
+            ["name", "in", ["Send to Manager", "Reject Registration", "Activate Membership", "Return for Review", "Expire Membership"]]
+        ],
+    },
+    {"dt": "Workflow", "filters": [["name", "=", "Gym Member Registration"]]},
+    {"dt": "Print Format", "filters": [["name", "=", "Gym Billing Summary"]]},
+]
+
 # Apps
 # ------------------
 
@@ -263,4 +291,3 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-
